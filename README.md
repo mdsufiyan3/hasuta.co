@@ -1,6 +1,6 @@
-# h-ecommarce
+# hasuta.shop
 
-This is an e-commerce web application project.
+This is the repository for hasuta.shop project.
 
 ## Installation
 

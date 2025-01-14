@@ -29,6 +29,10 @@
                 <a href="profile.html" class="nav-icon">
                     <img src="image/WhatsApp_Image_2025-01-10_at_21.22.20_5031295e-removebg-preview.png" alt="Profile" class="sticker-icon">
                 </a>
+                <!-- Add edit icon here -->
+                <a href="edit-profile.html" class="nav-icon">
+                    <i class="fas fa-edit sticker-icon"></i>
+                </a>
                 <a href="cart.html" class="nav-icon">
                     <img src="image/WhatsApp_Image_2025-01-10_at_20.47.46_ff41ac29-removebg-preview.png" alt="Cart" class="sticker-icon cart-sticker">
                     <span class="cart-count" id="cartCount">0</span>
@@ -48,6 +52,9 @@
             <div class="product-gallery">
                 <div class="main-image">
                     <img id="mainImage" src="" alt="Product Image">
+                    <button class="edit-image-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
                 </div>
                 <div class="thumbnail-container">
                     <!-- Thumbnails will be dynamically added -->
@@ -596,6 +603,295 @@
     </div>
 </div>
 
+<!-- Add this before the closing body tag -->
+<div class="edit-overlay" id="editOverlay">
+    <div class="edit-overlay-content">
+        <div class="edit-overlay-header">
+            <h2>Edit Product Details</h2>
+            <button class="close-overlay" id="closeEditOverlay">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="editProductForm" class="edit-form">
+            <div class="form-group image-upload-section">
+                <label>Main Image</label>
+                <div class="main-image-preview">
+                    <img id="editMainImagePreview" src="" alt="Main product image">
+                    <div class="image-upload-overlay">
+                        <input type="file" id="mainImageInput" accept="image/*" hidden>
+                        <button type="button" class="upload-btn" id="mainImageUploadBtn">
+                            <i class="fas fa-camera"></i>
+                            <span>Change Image</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Thumbnail Images</label>
+                <div class="thumbnail-upload-grid">
+                    <div class="thumbnail-slot">
+                        <img src="" alt="Thumbnail 1">
+                        <input type="file" accept="image/*" hidden>
+                        <button type="button" class="upload-thumbnail-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- Repeat for more thumbnail slots -->
+                    <div class="thumbnail-slot">
+                        <img src="" alt="Thumbnail 2">
+                        <input type="file" accept="image/*" hidden>
+                        <button type="button" class="upload-thumbnail-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="thumbnail-slot">
+                        <img src="" alt="Thumbnail 3">
+                        <input type="file" accept="image/*" hidden>
+                        <button type="button" class="upload-thumbnail-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="thumbnail-slot">
+                        <img src="" alt="Thumbnail 4">
+                        <input type="file" accept="image/*" hidden>
+                        <button type="button" class="upload-thumbnail-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group stock-control">
+                <label>Stock Status</label>
+                <div class="stock-toggle">
+                    <input type="checkbox" id="stockStatus" checked>
+                    <label for="stockStatus" class="toggle-label">
+                        <span class="status-text in-stock">In Stock</span>
+                        <span class="status-text out-of-stock">Out of Stock</span>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group size-controls">
+                <label>Available Sizes</label>
+                <div class="size-checkbox-grid">
+                    <div class="size-checkbox">
+                        <input type="checkbox" id="sizeS" name="sizes[]" value="S">
+                        <label for="sizeS">S</label>
+                    </div>
+                    <div class="size-checkbox">
+                        <input type="checkbox" id="sizeM" name="sizes[]" value="M">
+                        <label for="sizeM">M</label>
+                    </div>
+                    <div class="size-checkbox">
+                        <input type="checkbox" id="sizeL" name="sizes[]" value="L">
+                        <label for="sizeL">L</label>
+                    </div>
+                    <div class="size-checkbox">
+                        <input type="checkbox" id="sizeXL" name="sizes[]" value="XL">
+                        <label for="sizeXL">XL</label>
+                    </div>
+                    <div class="size-checkbox">
+                        <input type="checkbox" id="sizeXXL" name="sizes[]" value="XXL">
+                        <label for="sizeXXL">XXL</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing form groups -->
+            <div class="form-group">
+                <label for="editTitle">Product Title</label>
+                <input type="text" id="editTitle" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="editPrice">Price (₹)</label>
+                <input type="number" id="editPrice" name="price" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="editCategory">Category</label>
+                <input type="text" id="editCategory" name="category" required>
+            </div>
+
+            <div class="form-group reviews-management">
+                <label>Customer Reviews Management</label>
+                <div class="reviews-list">
+                    <div class="review-edit-item">
+                        <div class="review-edit-header">
+                            <div class="review-user-info">
+                                <span class="user-name">John Doe</span>
+                                <span class="review-date">2 days ago</span>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-actions">
+                                <button type="button" class="review-action-btn hide-btn">
+                                    <i class="fas fa-eye-slash"></i>
+                                </button>
+                                <button type="button" class="review-action-btn delete-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <textarea class="review-text" rows="2">Great quality product! The fabric is premium and the fit is perfect. Highly recommended for anyone looking for comfortable streetwear.</textarea>
+                        </div>
+                    </div>
+                    <!-- Add more review items here -->
+                    <div class="review-edit-item">
+                        <div class="review-edit-header">
+                            <div class="review-user-info">
+                                <span class="user-name">Emma Thompson</span>
+                                <span class="review-date">3 days ago</span>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                            <div class="review-actions">
+                                <button type="button" class="review-action-btn hide-btn"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" class="review-action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <textarea class="review-text" rows="2">Love the design! The hoodie is super comfortable and the color is exactly as shown. Perfect for casual wear.</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="review-edit-item">
+                        <div class="review-edit-header">
+                            <div class="review-user-info">
+                                <span class="user-name">Alex Chen</span>
+                                <span class="review-date">5 days ago</span>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-actions">
+                                <button type="button" class="review-action-btn hide-btn"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" class="review-action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <textarea class="review-text" rows="2">Amazing streetwear piece! The quality is outstanding and the style is on point. Will definitely buy more!</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Review 4-17 -->
+                    <div class="review-edit-item">
+                        <div class="review-edit-header">
+                            <div class="review-user-info">
+                                <span class="user-name">Sarah Wilson</span>
+                                <span class="review-date">1 week ago</span>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-actions">
+                                <button type="button" class="review-action-btn hide-btn"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" class="review-action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <textarea class="review-text" rows="2">Good product but sizing runs a bit large. I recommend going one size down. Otherwise, great quality!</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Additional reviews with varying ratings and comments -->
+                    <div class="review-edit-item">
+                        <div class="review-edit-header">
+                            <div class="review-user-info">
+                                <span class="user-name">Michael Brown</span>
+                                <span class="review-date">1 week ago</span>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-actions">
+                                <button type="button" class="review-action-btn hide-btn"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" class="review-action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <textarea class="review-text" rows="2">Perfect winter wear! The material is thick and warm, exactly what I was looking for. Fast shipping too!</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Repeat similar structure for remaining reviews with different names, dates, ratings, and comments -->
+                    <!-- Reviews 6-17 follow the same structure with unique content -->
+
+                    <!-- Example of a critical review -->
+                    <div class="review-edit-item">
+                        <div class="review-edit-header">
+                            <div class="review-user-info">
+                                <span class="user-name">David Lee</span>
+                                <span class="review-date">2 weeks ago</span>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-actions">
+                                <button type="button" class="review-action-btn hide-btn"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" class="review-action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <textarea class="review-text" rows="2">The design is nice but the stitching quality could be better. Had some loose threads after first wash.</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Additional reviews for diverse feedback -->
+                    <div class="review-edit-item">
+                        <div class="review-edit-header">
+                            <div class="review-user-info">
+                                <span class="user-name">Lisa Martinez</span>
+                                <span class="review-date">2 weeks ago</span>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="review-actions">
+                                <button type="button" class="review-action-btn hide-btn"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" class="review-action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <textarea class="review-text" rows="2">Absolutely love the street style vibe! The hoodie is comfortable and stylish. Got lots of compliments!</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Continue with remaining reviews following the same pattern -->
+                </div>
+                <div class="reviews-controls">
+                    <button type="button" class="add-review-btn">
+                        <i class="fas fa-plus"></i>
+                        Add Review
+                    </button>
+                    <div class="reviews-stats">
+                        <span>Total Reviews: 127</span>
+                        <span>Average Rating: 4.5</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" id="cancelEdit">Cancel</button>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 </body>
+</html>
 
 

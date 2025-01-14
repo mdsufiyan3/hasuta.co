@@ -266,7 +266,7 @@ body {
 .nav-icons {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.2rem; /* Increased gap to accommodate new icon */
 }
 
 .nav-icon {
@@ -404,6 +404,17 @@ body {
     align-items: center;
     justify-content: center;
     padding: 2px;
+}
+
+/* Add edit icon styles */
+.nav-icon .fa-edit {
+    font-size: 20px;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+.nav-icon:hover .fa-edit {
+    color: var(--primary-color);
 }
 
 
@@ -2075,5 +2086,600 @@ main {
 
     .main-image img {
         max-width: 100%;
+    }
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    /* ...existing code... */
+    
+    .nav-icon .fa-edit {
+        font-size: 18px;
+    }
+}
+
+/* ...existing code... */
+
+.main-image {
+    position: relative;
+    /* ...existing code... */
+}
+
+.edit-image-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.edit-image-btn i {
+    color: #fff;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.edit-image-btn:hover {
+    background: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.edit-image-btn:hover i {
+    transform: rotate(15deg);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .edit-image-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .edit-image-btn i {
+        font-size: 16px;
+    }
+}
+
+/* Edit Overlay Styles */
+.edit-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.edit-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.edit-overlay-content {
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    background: #111;
+    border-radius: 8px;
+    padding: 2rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.1);
+}
+
+.edit-overlay-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.edit-overlay-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.edit-overlay-content::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 3px;
+}
+
+.edit-overlay-content::-webkit-scrollbar-thumb:hover {
+    background-color: var(--accent-color);
+}
+
+.edit-overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    background: #111;
+    z-index: 1;
+    margin-bottom: 1rem;
+    padding: 1rem 0;
+}
+
+.edit-overlay-header h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.edit-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.edit-form label {
+    display: block;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.edit-form input {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    padding-top: 1rem;
+}
+
+.edit-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    position: sticky;
+    bottom: 0;
+    background: #111;
+    padding: 1rem 0;
+    z-index: 1;
+}
+
+.cancel-btn, .save-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.save-btn {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.save-btn:hover {
+    background: var(--accent-color);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .edit-overlay-content {
+        width: 95%;
+        padding: 1.5rem;
+        max-height: 85vh;
+    }
+    
+    .edit-overlay-header {
+        padding: 0.8rem 0;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .cancel-btn, .save-btn {
+        width: 100%;
+    }
+}
+
+/* Image Upload Section Styles */
+.image-upload-section {
+    margin-bottom: 2rem;
+}
+
+.main-image-preview {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.main-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.main-image-preview:hover .image-upload-overlay {
+    opacity: 1;
+}
+
+.upload-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.thumbnail-upload-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.thumbnail-slot {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.thumbnail-slot img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-thumbnail-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.upload-thumbnail-btn:hover {
+    background: var(--primary-color);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.thumbnail-slot:hover .upload-thumbnail-btn {
+    background: var(--primary-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .thumbnail-upload-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .main-image-preview {
+        height: 150px;
+    }
+}
+
+/* Stock Status Toggle Styles */
+.stock-control {
+    margin-bottom: 2rem;
+}
+
+.stock-toggle {
+    position: relative;
+    width: 100%;
+}
+
+.stock-toggle input {
+    display: none;
+}
+
+.toggle-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.status-text {
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s ease;
+}
+
+.in-stock {
+    color: #4CAF50;
+}
+
+.out-of-stock {
+    color: #f44336;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: rgba(76, 175, 80, 0.2);
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+}
+
+#stockStatus:checked ~ .toggle-label .toggle-slider {
+    transform: translateX(100%);
+    background: rgba(244, 67, 54, 0.2);
+}
+
+/* Size Checkbox Grid Styles */
+.size-checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.size-checkbox {
+    position: relative;
+}
+
+.size-checkbox input {
+    display: none;
+}
+
+.size-checkbox label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.size-checkbox input:checked + label {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.size-checkbox label:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .size-checkbox-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .size-checkbox label {
+        padding: 0.6rem;
+    }
+}
+
+/* Reviews Management Styles */
+.reviews-management {
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+}
+
+.reviews-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.review-edit-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.review-edit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.review-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.user-name {
+    font-weight: 600;
+    color: #fff;
+}
+
+.review-date {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.review-rating {
+    color: #ffc107;
+    font-size: 0.9rem;
+}
+
+.review-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.review-action-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 0.3rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.review-action-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.review-action-btn.hide-btn:hover {
+    color: #ffc107;
+}
+
+.review-action-btn.delete-btn:hover {
+    color: #f44336;
+}
+
+.review-content {
+    position: relative;
+}
+
+.review-text {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: #fff;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+    resize: vertical;
+    min-height: 60px;
+    transition: all 0.3s ease;
+}
+
+.review-text:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.reviews-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.add-review-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-review-btn:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.reviews-stats {
+    display: flex;
+    gap: 1.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .reviews-controls {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .reviews-stats {
+        flex-direction: column;
+        gap: 0.5rem;
     }
 }

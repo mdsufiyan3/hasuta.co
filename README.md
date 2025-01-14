@@ -1,25 +1,28 @@
 # hasuta.shop
 
-This is the repository for hasuta.shop project.
+Welcome to the hasuta.shop project repository.
+
+## About
+
+Description of hasuta.shop and its purpose.
 
 ## Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/mdsufiyan3/h-ecommarce.git
-```
-
-2. Install dependencies:
 ```bash
 npm install
 ```
 
 ## Usage
 
-To run the application:
 ```bash
 npm start
 ```
+
+## Features
+
+- Feature 1
+- Feature 2
+- Feature 3
 
 ## Contributing
 

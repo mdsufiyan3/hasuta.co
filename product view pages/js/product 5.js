@@ -452,6 +452,34 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Initialize brand metrics animation
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const metricsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const metrics = entry.target.querySelectorAll('.metric-fill');
+                metrics.forEach(metric => {
+                    const width = metric.style.width;
+                    metric.style.width = '0';
+                    setTimeout(() => {
+                        metric.style.width = width;
+                    }, 100);
+                });
+                metricsObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const brandMetrics = document.querySelector('.brand-metrics');
+    if (brandMetrics) {
+        metricsObserver.observe(brandMetrics);
+    }
 });
 
 // Add these new functions after the existing code
@@ -1839,7 +1867,6 @@ function initializeReviewsEdit() {
 
 function initializeReviewSelection() {
     const reviewsOverlay = document.getElementById('reviewsOverlay');
-    const selectAllBtn = document.querySelector('.select-all-reviews');
 
     // Add checkbox to each review
     function addSelectionToReviews() {
@@ -1859,16 +1886,6 @@ function initializeReviewSelection() {
             }
         });
     }
-
-    // Handle select all functionality
-    selectAllBtn.addEventListener('click', () => {
-        const checkboxes = reviewsOverlay.querySelectorAll('.review-select-box');
-        const allChecked = Array.from(checkboxes).every(box => box.checked);
-        
-        checkboxes.forEach(box => {
-            box.checked = !allChecked;
-        });
-    });
 
     // Initialize when reviews are loaded
     const observer = new MutationObserver(() => {
@@ -1930,3 +1947,52 @@ function initializeReviewContent() {
         }
     });
 }
+
+// ...existing code...
+
+document.querySelector('.view-more-btn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    // You can add any additional tracking or analytics here before navigation
+    window.location.href = '/reviews-page.html';
+});
+
+function createReviewElement(review) {
+    const reviewElement = document.createElement('div');
+    reviewElement.className = 'review-item';
+    reviewElement.innerHTML = `
+        <div class="review-header">
+            <div class="review-user">
+                <div class="user-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name">${review.name}</div>
+                    <div class="review-date">${review.date}</div>
+                </div>
+            </div>
+            <div class="review-rating">
+                ${getStarRating(review.rating)}
+            </div>
+        </div>
+        <div class="review-content" data-collapsed="true">
+            <p>${review.content}</p>
+            <button class="show-more-btn">
+                <span>Show more</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        ${review.verified ? `
+            <div class="verified-badge">
+                <i class="fas fa-check-circle"></i>
+                <span>Verified Purchase</span>
+            </div>
+        ` : ''}
+    `;
+    
+    // Initialize review content functionality
+    initializeReviewContent();
+    
+    return reviewElement;
+}
+
+// ...existing code...

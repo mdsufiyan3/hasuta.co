@@ -291,6 +291,80 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.overflow = '';
         }
     });
+
+    // Edit overlay functionality
+    const editButton = document.querySelector('.edit-image-btn');
+    const editOverlay = document.getElementById('editOverlay');
+    const closeEditOverlay = document.getElementById('closeEditOverlay');
+    const cancelEdit = document.getElementById('cancelEdit');
+    const editForm = document.getElementById('editProductForm');
+
+    editButton.addEventListener('click', () => {
+        // Populate form with current product details
+        document.getElementById('editTitle').value = document.getElementById('productTitle').textContent;
+        document.getElementById('editPrice').value = document.getElementById('productPrice').textContent.replace(/[^0-9]/g, '');
+        document.getElementById('editCategory').value = document.getElementById('productCategory').textContent.toLowerCase();
+        
+        // Show overlay
+        editOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    closeEditOverlay.addEventListener('click', closeEditOverlayHandler);
+    cancelEdit.addEventListener('click', closeEditOverlayHandler);
+
+    function closeEditOverlayHandler() {
+        editOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    editForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        try {
+            const formData = new FormData(editForm);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Add loading state
+            const saveBtn = editForm.querySelector('.save-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            // Simulate API call - replace with your actual update logic
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Update UI with new values
+            document.getElementById('productTitle').textContent = data.title;
+            document.getElementById('productPrice').textContent = `₹${data.price}`;
+            document.getElementById('productCategory').textContent = data.category;
+
+            // Show success message
+            showToast('Product details updated successfully!');
+            closeEditOverlayHandler();
+
+        } catch (error) {
+            console.error('Error updating product:', error);
+            showToast('Failed to update product details');
+        } finally {
+            const saveBtn = editForm.querySelector('.save-btn');
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save Changes';
+        }
+    });
+
+    // Close overlay when clicking outside
+    editOverlay.addEventListener('click', (e) => {
+        if (e.target === editOverlay) {
+            closeEditOverlayHandler();
+        }
+    });
+
+    // Close overlay with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && editOverlay.classList.contains('active')) {
+            closeEditOverlayHandler();
+        }
+    });
 });
 
 async function loadProductDetails(productId) {

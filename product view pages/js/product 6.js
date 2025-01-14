@@ -53,31 +53,6 @@ function checkUserRole() {
            (userRole === 'owner' && userId === productOwnerId);
 }
 
-// Add this new function near the top of your file
-function getRelativeTimeString(date) {
-    const now = new Date();
-    const past = new Date(date);
-    const diffTime = Math.abs(now - past);
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) {
-        return 'Today';
-    } else if (diffDays === 1) {
-        return 'Yesterday';
-    } else if (diffDays < 7) {
-        return `${diffDays}D ago`;
-    } else if (diffDays < 30) {
-        const weeks = Math.floor(diffDays / 7);
-        return `${weeks}W ago`;
-    } else if (diffDays < 365) {
-        const months = Math.floor(diffDays / 30);
-        return `${months}M ago`;
-    } else {
-        const years = Math.floor(diffDays / 365);
-        return `${years}Y ago`;
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     // Get product ID from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
@@ -478,7 +453,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    initializeReviewEdit();
+    // Initialize brand metrics animation
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const metricsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const metrics = entry.target.querySelectorAll('.metric-fill');
+                metrics.forEach(metric => {
+                    const width = metric.style.width;
+                    metric.style.width = '0';
+                    setTimeout(() => {
+                        metric.style.width = width;
+                    }, 100);
+                });
+                metricsObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const brandMetrics = document.querySelector('.brand-metrics');
+    if (brandMetrics) {
+        metricsObserver.observe(brandMetrics);
+    }
 });
 
 // Add these new functions after the existing code
@@ -688,7 +689,6 @@ function handleViewAllReviews() {
 
     // Add additional reviews
     additionalReviews.forEach(review => {
-        const relativeDate = getRelativeTimeString(review.date);
         const reviewElement = document.createElement('div');
         reviewElement.className = 'review-item';
         reviewElement.innerHTML = `
@@ -699,7 +699,7 @@ function handleViewAllReviews() {
                     </div>
                     <div class="user-info">
                         <div class="user-name">${review.name}</div>
-                        <div class="review-date">${relativeDate}</div>
+                        <div class="review-date">${review.date}</div>
                     </div>
                 </div>
                 <div class="review-rating">
@@ -735,128 +735,107 @@ function handleViewAllReviews() {
 const additionalReviews = [
     {
         name: "Emily Johnson",
-        date: "2024-01-02",
+        date: "3 days ago",
         rating: 5,
         content: "The fabric quality is exceptional! This has become my go-to piece for both casual and semi-formal occasions. Definitely worth the investment.",
         verified: true
     },
     {
         name: "Michael Rodriguez",
-        date: "2023-12-28",
+        date: "1 week ago",
         rating: 4,
         content: "Great fit and style. The only reason it's not 5 stars is because the delivery took a bit longer than expected. Still, very satisfied with the purchase.",
         verified: true
     },
     {
         name: "Sophie Chen",
-        date: "2023-12-25",
+        date: "1 week ago",
         rating: 5,
         content: "Love how versatile this piece is! The attention to detail in the stitching and design is remarkable. Will definitely buy more from this brand.",
         verified: true
     },
     {
         name: "David Kim",
-        date: "2023-12-20",
+        date: "2 weeks ago",
         rating: 5,
         content: "Perfect streetwear aesthetic. The quality matches the price point, and the sizing is spot on. Really impressed with the overall look and feel.",
         verified: true
     },
     {
         name: "Anna Williams",
-        date: "2023-12-15",
+        date: "2 weeks ago",
         rating: 4,
         content: "Beautiful design and great material. Fits as expected and the color is exactly as shown in the pictures. Would recommend sizing up if you prefer a looser fit.",
         verified: true
     },
     {
         name: "James Thompson",
-        date: "2023-12-10",
+        date: "3 weeks ago",
         rating: 5,
         content: "This is my third purchase from HASUTA and they never disappoint. The quality is consistent and the style is always on point. Highly recommend!",
         verified: true
     },
     {
         name: "Lily Zhang",
-        date: "2023-12-05",
+        date: "3 weeks ago",
         rating: 4,
         content: "Really happy with this purchase. The material is breathable and comfortable. The design is unique and gets lots of compliments.",
         verified: true
     },
     {
         name: "Ryan Patel",
-        date: "2023-12-01",
+        date: "1 month ago",
         rating: 5,
         content: "Exceeded my expectations! The fit is perfect and the material quality is superior to many other brands I've tried. Will be ordering more colors.",
         verified: true
     },
     {
         name: "Olivia Brown",
-        date: "2023-11-25",
+        date: "1 month ago",
         rating: 5,
         content: "Absolutely love everything about this! The design is trendy yet timeless, and the comfort level is amazing. Worth every penny.",
         verified: true
     },
     {
         name: "Marcus Lee",
-        date: "2023-11-20",
+        date: "1 month ago",
         rating: 4,
         content: "Great addition to my wardrobe. The style is versatile and the quality feels premium. Just wish there were more color options available.",
         verified: true
     },
     {
         name: "Isabella Garcia",
-        date: "2023-11-15",
+        date: "2 months ago",
         rating: 5,
         content: "Perfect fit and amazing quality! The attention to detail is impressive, and the style is exactly what I was looking for. Highly recommended!",
         verified: true
     },
     {
         name: "Thomas Wilson",
-        date: "2023-11-10",
+        date: "2 months ago",
         rating: 5,
         content: "Outstanding quality and design. The material is durable yet comfortable, and the fit is exactly as described. Will definitely buy more from HASUTA.",
         verified: true
     },
     {
         name: "Hannah Mitchell",
-        date: "2023-11-05",
+        date: "2 months ago",
         rating: 4,
         content: "Really pleased with this purchase. The style is unique and the quality is excellent. Shipping was quick and packaging was great.",
         verified: true
     },
     {
         name: "Kevin Wang",
-        date: "2023-11-01",
+        date: "3 months ago",
         rating: 5,
         content: "Best streetwear purchase I've made this year! The quality is outstanding and the design is so unique. Gets lots of compliments every time I wear it.",
         verified: true
     },
     {
         name: "Rachel Cooper",
-        date: "2023-10-25",
+        date: "3 months ago",
         rating: 5,
         content: "Love everything about this piece! The material is premium quality and the fit is perfect. Definitely becoming a regular HASUTA customer!",
-        verified: true
-    },
-    {
-        name: "Jessica Martinez",
-        date: "2023-10-20",
-        rating: 5,
-        content: "This is by far the best purchase I've made! The attention to detail and craftsmanship is exceptional. The fabric feels luxurious and the fit is absolutely perfect. I've received so many compliments!",
-        verified: true
-    },
-    {
-        name: "Alexander Wright",
-        date: "2023-10-15",
-        rating: 4,
-        content: "Really impressed with the quality and style. The sizing is accurate and the material feels durable. Only suggestion would be to offer more color options, but overall very satisfied with my purchase.",
-        verified: true
-    },
-    {
-        name: "Nina Patel",
-        date: "2023-10-10",
-        rating: 5,
-        content: "Absolutely in love with this piece! The design is modern yet timeless, and the quality is outstanding. HASUTA never disappoints - this is my fourth purchase and definitely not my last!",
         verified: true
     }
 ];
@@ -1768,189 +1747,62 @@ function initializeReviewsEdit() {
     }
 
     function populateReviewsEditor() {
-        const reviewsList = document.querySelector('.reviews-list-editor');
-        reviewsList.innerHTML = ''; // Clear existing content
-    
-        // Add select all checkbox at the top
-        const selectAllContainer = document.createElement('div');
-        selectAllContainer.className = 'select-all-container';
-        selectAllContainer.innerHTML = `
-            <label class="select-all-label">
-                <input type="checkbox" id="selectAllReviews">
-                <span>Select All Reviews</span>
-            </label>
-            <div class="bulk-actions" style="display: none;">
-                <button class="bulk-delete-btn">Delete Selected</button>
-            </div>
-        `;
-        reviewsList.appendChild(selectAllContainer);
-    
-        // Add event listener for select all
-        const selectAllCheckbox = selectAllContainer.querySelector('#selectAllReviews');
-        selectAllCheckbox.addEventListener('change', (e) => {
-            const allCheckboxes = reviewsList.querySelectorAll('.review-checkbox');
-            allCheckboxes.forEach(checkbox => checkbox.checked = e.target.checked);
-            updateBulkActionsVisibility();
-        });
-    
-        // Loop through all reviews
-        allReviews.forEach((review, index) => {
-            const reviewElement = document.createElement('div');
-            reviewElement.className = 'review-edit-item';
-            reviewElement.dataset.index = index;
-            
-            // Convert the date format
-            const relativeDate = getRelativeTimeString(review.date);
-            
-            reviewElement.innerHTML = `
-                <div class="review-select">
-                    <input type="checkbox" class="review-checkbox" data-index="${index}">
+        const reviews = Array.from(document.querySelectorAll('.review-item')).map(review => ({
+            name: review.querySelector('.user-name').textContent,
+            date: review.querySelector('.review-date').textContent,
+            content: review.querySelector('.review-content p').textContent,
+            rating: review.querySelector('.review-rating').children.length,
+            verified: review.querySelector('.verified-badge') !== null
+        }));
+
+        reviewsList.innerHTML = reviews.map((review, index) => `
+            <div class="review-edit-item" data-index="${index}">
+                <div class="review-edit-actions">
+                    <button class="edit-review-btn">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                    <button class="delete-review-btn">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
                 </div>
-                <div class="review-edit-form">
-                    <div class="form-group">
-                        <label>User Name</label>
-                        <input type="text" class="review-name-input" value="${review.name}">
-                    </div>
-                    <div class="form-group">
-                        <label>Rating</label>
-                        <div class="rating-input">
-                            ${Array(5).fill().map((_, i) => `
-                                <input type="radio" name="rating-${index}" value="${i + 1}" 
-                                    ${i + 1 === Math.round(review.rating) ? 'checked' : ''}>
-                                <label class="star-label">★</label>
-                            `).join('')}
+                <div class="review-preview">
+                    <div class="review-header">
+                        <strong>${review.name}</strong>
+                        <div class="review-rating">
+                            ${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Review Text</label>
-                        <textarea class="review-text-input" rows="4">${review.content}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Date Posted</label>
-                        <input type="text" class="review-date-input" value="${relativeDate}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label class="verified-label">
-                            <input type="checkbox" class="verified-checkbox" ${review.verified ? 'checked' : ''}>
-                            <span>Verified Purchase</span>
-                        </label>
-                    </div>
-                    <div class="edit-actions">
-                        <button type="button" class="delete-review-btn" data-index="${index}">
-                            <i class="fas fa-trash-alt"></i>
-                            Delete
-                        </button>
-                        <button type="button" class="update-review-btn" data-index="${index}">
-                            <i class="fas fa-save"></i>
-                            Update
-                        </button>
-                    </div>
+                    <p>${review.content}</p>
                 </div>
-            `;
-    
-            // Add event listeners for checkboxes
-            const checkbox = reviewElement.querySelector('.review-checkbox');
-            checkbox.addEventListener('change', () => {
-                updateBulkActionsVisibility();
-                updateSelectAllCheckbox();
-            });
-    
-            // Add existing event listeners for delete and update buttons
-            const deleteBtn = reviewElement.querySelector('.delete-review-btn');
-            const updateBtn = reviewElement.querySelector('.update-review-btn');
-    
-            deleteBtn.addEventListener('click', () => {
-                if (confirm('Are you sure you want to delete this review?')) {
-                    reviewElement.remove();
-                    showToast('Review deleted successfully');
-                }
-            });
-    
-            updateBtn.addEventListener('click', () => {
-                const form = reviewElement.querySelector('.review-edit-form');
-                const newData = {
-                    name: form.querySelector('.review-name-input').value,
-                    rating: parseInt(form.querySelector('input[name^="rating"]:checked').value),
-                    content: form.querySelector('.review-text-input').value,
-                    date: form.querySelector('.review-date-input').value,
-                    verified: form.querySelector('.verified-checkbox').checked
-                };
-                
-                // Update the review in the allReviews array
-                allReviews[index] = { ...allReviews[index], ...newData };
+            </div>
+        `).join('');
 
-                // Update the review in the Customer Reviews section
-                const reviewsContainer = document.querySelector('.reviews-container');
-                const reviewItems = reviewsContainer.querySelectorAll('.review-item');
-                if (reviewItems[index]) {
-                    // Update name
-                    reviewItems[index].querySelector('.user-name').textContent = newData.name;
-                    
-                    // Update rating
-                    const ratingContainer = reviewItems[index].querySelector('.review-rating');
-                    ratingContainer.innerHTML = getStarRating(newData.rating);
-                    
-                    // Update content
-                    reviewItems[index].querySelector('.review-content p').textContent = newData.content;
-                    
-                    // Update date
-                    reviewItems[index].querySelector('.review-date').textContent = newData.date;
-                    
-                    // Update verified status
-                    const verifiedBadge = reviewItems[index].querySelector('.verified-badge');
-                    if (verifiedBadge) {
-                        if (newData.verified) {
-                            verifiedBadge.style.display = 'flex';
-                        } else {
-                            verifiedBadge.style.display = 'none';
-                        }
-                    }
-                }
+        // Update overall rating and total reviews
+        document.getElementById('editOverallRating').value = '4.5'; // Replace with actual value
+        document.getElementById('editTotalReviews').value = reviews.length;
+    }
 
-                showToast('Review updated successfully');
-            });
-    
-            reviewsList.appendChild(reviewElement);
-        });
-    
-        // Function to update bulk actions visibility
-        function updateBulkActionsVisibility() {
-            const bulkActions = document.querySelector('.bulk-actions');
-            const checkedBoxes = reviewsList.querySelectorAll('.review-checkbox:checked');
-            bulkActions.style.display = checkedBoxes.length > 0 ? 'flex' : 'none';
-        }
-    
-        // Function to update select all checkbox state
-        function updateSelectAllCheckbox() {
-            const allCheckboxes = reviewsList.querySelectorAll('.review-checkbox');
-            const checkedCheckboxes = reviewsList.querySelectorAll('.review-checkbox:checked');
-            selectAllCheckbox.checked = allCheckboxes.length === checkedCheckboxes.length;
-        }
-    
-        // Add bulk delete functionality
-        const bulkDeleteBtn = selectAllContainer.querySelector('.bulk-delete-btn');
-        bulkDeleteBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to delete all selected reviews?')) {
-                const checkedBoxes = reviewsList.querySelectorAll('.review-checkbox:checked');
-                checkedBoxes.forEach(checkbox => {
-                    const reviewItem = checkbox.closest('.review-edit-item');
-                    reviewItem.remove();
-                });
-                updateBulkActionsVisibility();
-                updateSelectAllCheckbox();
-                showToast('Selected reviews deleted successfully');
-            }
-        });
-    
-        // Update summary information
-        const totalReviews = document.getElementById('editTotalReviews');
-        const overallRating = document.getElementById('editOverallRating');
-        
-        if (totalReviews && overallRating) {
-            totalReviews.value = allReviews.length;
-            const avgRating = (allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length).toFixed(1);
-            overallRating.value = avgRating;
-        }
+    function handleReviewEdit(reviewItem) {
+        const preview = reviewItem.querySelector('.review-preview');
+        const name = preview.querySelector('strong').textContent;
+        const content = preview.querySelector('p').textContent;
+        const rating = preview.querySelector('.review-rating').textContent.split('★').length - 1;
+
+        reviewItem.innerHTML = `
+            <form class="review-edit-form">
+                <input type="text" name="name" value="${name}" placeholder="Reviewer Name">
+                <div class="rating-input">
+                    ${Array(5).fill().map((_, i) => `
+                        <input type="radio" name="rating" value="${i+1}" ${rating === i+1 ? 'checked' : ''}>
+                    `).join('')}
+                </div>
+                <textarea name="content" placeholder="Review Content">${content}</textarea>
+                <div class="form-actions">
+                    <button type="button" class="cancel-review-edit">Cancel</button>
+                    <button type="submit" class="save-review-edit">Save</button>
+                </div>
+            </form>
+        `;
     }
 
     // Event Listeners
@@ -2015,7 +1867,6 @@ function initializeReviewsEdit() {
 
 function initializeReviewSelection() {
     const reviewsOverlay = document.getElementById('reviewsOverlay');
-    const selectAllBtn = document.querySelector('.select-all-reviews');
 
     // Add checkbox to each review
     function addSelectionToReviews() {
@@ -2035,16 +1886,6 @@ function initializeReviewSelection() {
             }
         });
     }
-
-    // Handle select all functionality
-    selectAllBtn.addEventListener('click', () => {
-        const checkboxes = reviewsOverlay.querySelectorAll('.review-select-box');
-        const allChecked = Array.from(checkboxes).every(box => box.checked);
-        
-        checkboxes.forEach(box => {
-            box.checked = !allChecked;
-        });
-    });
 
     // Initialize when reviews are loaded
     const observer = new MutationObserver(() => {
@@ -2107,536 +1948,51 @@ function initializeReviewContent() {
     });
 }
 
-function initializeReviewEdit() {
-    const reviewsEditOverlay = document.getElementById('reviewsEditOverlay');
-    const reviewsList = document.querySelector('.reviews-list-editor');
-    
-    function createReviewEditForm(review) {
-        const reviewText = review.querySelector('p').textContent;
-        const reviewRating = review.querySelector('.review-rating').children.length;
-        const userName = review.querySelector('.user-name').textContent;
-        const reviewDate = review.querySelector('.review-date').textContent;
-        
-        return `
-            <div class="edit-review-item">
-                <div class="review-edit-form">
-                    <div class="form-group">
-                        <label>User Name</label>
-                        <input type="text" class="review-name-input" value="${userName}">
-                    </div>
-                    <div class="form-group">
-                        <label>Rating</label>
-                        <div class="rating-input">
-                            ${Array(5).fill().map((_, i) => `
-                                <input type="radio" name="rating" value="${i + 1}" 
-                                    ${i + 1 === reviewRating ? 'checked' : ''}>
-                            `).join('')}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Review Text</label>
-                        <textarea class="review-text-input">${reviewText}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Date</label>
-                        <input type="text" class="review-date-input" value="${reviewDate}" readonly>
-                    </div>
-                    <div class="edit-actions">
-                        <button class="cancel-edit-review">Cancel</button>
-                        <button class="save-edit-review">Save Changes</button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
+// ...existing code...
 
-    function populateReviewsEditor() {
-        const reviewsList = document.querySelector('.reviews-list-editor');
-        reviewsList.innerHTML = ''; // Clear existing content
-    
-        // Loop through all reviews
-        allReviews.forEach((review, index) => {
-            const reviewElement = document.createElement('div');
-            reviewElement.className = 'review-edit-item';
-            reviewElement.dataset.index = index;
-            reviewElement.innerHTML = `
-                <div class="review-edit-form">
-                    <div class="form-group">
-                        <label>User Name</label>
-                        <input type="text" class="review-name-input" value="${review.name}">
-                    </div>
-                    <div class="form-group">
-                        <label>Rating</label>
-                        <div class="rating-input">
-                            ${Array(5).fill().map((_, i) => `
-                                <input type="radio" name="rating-${index}" value="${i + 1}" 
-                                    ${i + 1 === Math.round(review.rating) ? 'checked' : ''}>
-                                <label class="star-label">★</label>
-                            `).join('')}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Review Text</label>
-                        <textarea class="review-text-input" rows="4">${review.content}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Date Posted</label>
-                        <input type="text" class="review-date-input" value="${review.date}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label class="verified-label">
-                            <input type="checkbox" class="verified-checkbox" ${review.verified ? 'checked' : ''}>
-                            Verified Purchase
-                        </label>
-                    </div>
-                    <div class="edit-actions">
-                        <button type="button" class="delete-review-btn" data-index="${index}">
-                            <i class="fas fa-trash-alt"></i>
-                            Delete
-                        </button>
-                        <button type="button" class="update-review-btn" data-index="${index}">
-                            <i class="fas fa-save"></i>
-                            Update
-                        </button>
-                    </div>
-                </div>
-            `;
-    
-            // Add event listeners for delete and update buttons
-            const deleteBtn = reviewElement.querySelector('.delete-review-btn');
-            const updateBtn = reviewElement.querySelector('.update-review-btn');
-    
-            deleteBtn.addEventListener('click', () => {
-                if (confirm('Are you sure you want to delete this review?')) {
-                    reviewElement.remove();
-                    showToast('Review deleted successfully');
-                }
-            });
-    
-            updateBtn.addEventListener('click', () => {
-                const form = reviewElement.querySelector('.review-edit-form');
-                const newData = {
-                    name: form.querySelector('.review-name-input').value,
-                    rating: parseInt(form.querySelector('input[name^="rating"]:checked').value),
-                    content: form.querySelector('.review-text-input').value,
-                    date: form.querySelector('.review-date-input').value,
-                    verified: form.querySelector('.verified-checkbox').checked
-                };
-                
-                // Update the review in the allReviews array
-                allReviews[index] = { ...allReviews[index], ...newData };
-                showToast('Review updated successfully');
-            });
-    
-            reviewsList.appendChild(reviewElement);
-        });
-    
-        // Update summary information
-        const totalReviews = document.getElementById('editTotalReviews');
-        const overallRating = document.getElementById('editOverallRating');
-        
-        if (totalReviews && overallRating) {
-            totalReviews.value = allReviews.length;
-            const avgRating = (allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length).toFixed(1);
-            overallRating.value = avgRating;
-        }
-    }
-}
-
-// Call this function in your DOMContentLoaded event
-document.addEventListener('DOMContentLoaded', function() {
-    /* ...existing code... */
-    initializeReviewEdit();
-    /* ...existing code... */
+document.querySelector('.view-more-btn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    // You can add any additional tracking or analytics here before navigation
+    window.location.href = '/reviews-page.html';
 });
 
-// Add this review data array at the top level of your file
-const allReviews = [
-    {
-        name: "John Doe",
-        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
-        rating: 5,
-        content: "Great quality product! The fabric is premium and the fit is perfect. Highly recommended for anyone looking for comfortable streetwear that's both stylish and durable. The attention to detail is impressive.",
-        verified: true
-    },
-    {
-        name: "Sarah Wilson",
-        date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 1 week ago
-        rating: 4.5,
-        content: "Perfect fit and amazing quality! The material is so comfortable, and the design is exactly as shown in the pictures. Fast shipping too!",
-        verified: true
-    },
-    {
-        name: "Emily Johnson",
-        date: "2024-01-02", // Use actual dates in ISO format
-        rating: 5,
-        content: "The fabric quality is exceptional! This has become my go-to piece for both casual and semi-formal occasions. Definitely worth the investment.",
-        verified: true
-    },
-    {
-        name: "Michael Rodriguez",
-        date: "2023-12-28", // Use actual dates in ISO format
-        rating: 4,
-        content: "Great fit and style. The only reason it's not 5 stars is because the delivery took a bit longer than expected. Still, very satisfied with the purchase.",
-        verified: true
-    },
-    {
-        name: "Sophie Chen",
-        date: "2023-12-25", // Use actual dates in ISO format
-        rating: 5,
-        content: "Love how versatile this piece is! The attention to detail in the stitching and design is remarkable. Will definitely buy more from this brand.",
-        verified: true
-    },
-    {
-        name: "David Kim",
-        date: "2023-12-20", // Use actual dates in ISO format
-        rating: 5,
-        content: "Perfect streetwear aesthetic. The quality matches the price point, and the sizing is spot on. Really impressed with the overall look and feel.",
-        verified: true
-    },
-    {
-        name: "Anna Williams",
-        date: "2023-12-15", // Use actual dates in ISO format
-        rating: 4,
-        content: "Beautiful design and great material. Fits as expected and the color is exactly as shown in the pictures. Would recommend sizing up if you prefer a looser fit.",
-        verified: true
-    },
-    {
-        name: "James Thompson",
-        date: "2023-12-10", // Use actual dates in ISO format
-        rating: 5,
-        content: "This is my third purchase from HASUTA and they never disappoint. The quality is consistent and the style is always on point. Highly recommend!",
-        verified: true
-    },
-    {
-        name: "Lily Zhang",
-        date: "2023-12-05", // Use actual dates in ISO format
-        rating: 4,
-        content: "Really happy with this purchase. The material is breathable and comfortable. The design is unique and gets lots of compliments.",
-        verified: true
-    },
-    {
-        name: "Ryan Patel",
-        date: "2023-12-01", // Use actual dates in ISO format
-        rating: 5,
-        content: "Exceeded my expectations! The fit is perfect and the material quality is superior to many other brands I've tried. Will be ordering more colors.",
-        verified: true
-    },
-    {
-        name: "Olivia Brown",
-        date: "2023-11-25", // Use actual dates in ISO format
-        rating: 5,
-        content: "Absolutely love everything about this! The design is trendy yet timeless, and the comfort level is amazing. Worth every penny.",
-        verified: true
-    },
-    {
-        name: "Marcus Lee",
-        date: "2023-11-20", // Use actual dates in ISO format
-        rating: 4,
-        content: "Great addition to my wardrobe. The style is versatile and the quality feels premium. Just wish there were more color options available.",
-        verified: true
-    },
-    {
-        name: "Isabella Garcia",
-        date: "2023-11-15", // Use actual dates in ISO format
-        rating: 5,
-        content: "Perfect fit and amazing quality! The attention to detail is impressive, and the style is exactly what I was looking for. Highly recommended!",
-        verified: true
-    },
-    {
-        name: "Thomas Wilson",
-        date: "2023-11-10", // Use actual dates in ISO format
-        rating: 5,
-        content: "Outstanding quality and design. The material is durable yet comfortable, and the fit is exactly as described. Will definitely buy more from HASUTA.",
-        verified: true
-    },
-    {
-        name: "Hannah Mitchell",
-        date: "2023-11-05", // Use actual dates in ISO format
-        rating: 4,
-        content: "Really pleased with this purchase. The style is unique and the quality is excellent. Shipping was quick and packaging was great.",
-        verified: true
-    },
-    {
-        name: "Kevin Wang",
-        date: "2023-11-01", // Use actual dates in ISO format
-        rating: 5,
-        content: "Best streetwear purchase I've made this year! The quality is outstanding and the design is so unique. Gets lots of compliments every time I wear it.",
-        verified: true
-    },
-    {
-        name: "Rachel Cooper",
-        date: "2023-10-25", // Use actual dates in ISO format
-        rating: 5,
-        content: "Love everything about this piece! The material is premium quality and the fit is perfect. Definitely becoming a regular HASUTA customer!",
-        verified: true
-    },
-    {
-        name: "Jessica Martinez",
-        date: "2023-10-20", // Use actual dates in ISO format
-        rating: 5,
-        content: "This is by far the best purchase I've made! The attention to detail and craftsmanship is exceptional. The fabric feels luxurious and the fit is absolutely perfect. I've received so many compliments!",
-        verified: true
-    },
-    {
-        name: "Alexander Wright",
-        date: "2023-10-15", // Use actual dates in ISO format
-        rating: 4,
-        content: "Really impressed with the quality and style. The sizing is accurate and the material feels durable. Only suggestion would be to offer more color options, but overall very satisfied with my purchase.",
-        verified: true
-    },
-    {
-        name: "Nina Patel",
-        date: "2023-10-10", // Use actual dates in ISO format
-        rating: 5,
-        content: "Absolutely in love with this piece! The design is modern yet timeless, and the quality is outstanding. HASUTA never disappoints - this is my fourth purchase and definitely not my last!",
-        verified: true
-    }
-];
-
-// Modify the populateReviewsEditor function
-function populateReviewsEditor() {
-    const reviewsList = document.querySelector('.reviews-list-editor');
-    reviewsList.innerHTML = ''; // Clear existing content
-
-    // Add select all checkbox at the top
-    const selectAllContainer = document.createElement('div');
-    selectAllContainer.className = 'select-all-container';
-    selectAllContainer.innerHTML = `
-        <label class="select-all-label">
-            <input type="checkbox" id="selectAllReviews">
-            <span>Select All Reviews (20)</span>
-        </label>
-        <div class="bulk-actions" style="display: none;">
-            <button class="bulk-delete-btn">Delete Selected</button>
+function createReviewElement(review) {
+    const reviewElement = document.createElement('div');
+    reviewElement.className = 'review-item';
+    reviewElement.innerHTML = `
+        <div class="review-header">
+            <div class="review-user">
+                <div class="user-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name">${review.name}</div>
+                    <div class="review-date">${review.date}</div>
+                </div>
+            </div>
+            <div class="review-rating">
+                ${getStarRating(review.rating)}
+            </div>
         </div>
+        <div class="review-content" data-collapsed="true">
+            <p>${review.content}</p>
+            <button class="show-more-btn">
+                <span>Show more</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        ${review.verified ? `
+            <div class="verified-badge">
+                <i class="fas fa-check-circle"></i>
+                <span>Verified Purchase</span>
+            </div>
+        ` : ''}
     `;
-    reviewsList.appendChild(selectAllContainer);
-
-    // Add event listener for select all
-    const selectAllCheckbox = selectAllContainer.querySelector('#selectAllReviews');
-    selectAllCheckbox.addEventListener('change', (e) => {
-        const allCheckboxes = reviewsList.querySelectorAll('.review-checkbox');
-        allCheckboxes.forEach(checkbox => checkbox.checked = e.target.checked);
-        updateBulkActionsVisibility();
-    });
-
-    // Loop through all reviews
-    allReviews.forEach((review, index) => {
-        const reviewElement = document.createElement('div');
-        reviewElement.className = 'review-edit-item';
-        reviewElement.dataset.index = index;
-        
-        // Convert the date format
-        const relativeDate = getRelativeTimeString(review.date);
-        
-        reviewElement.innerHTML = `
-            <div class="review-select">
-                <input type="checkbox" class="review-checkbox" data-index="${index}">
-            </div>
-            <div class="review-edit-form">
-                <div class="form-group">
-                    <label>User Name</label>
-                    <input type="text" class="review-name-input" value="${review.name}">
-                </div>
-                <div class="form-group">
-                    <label>Rating</label>
-                    <div class="rating-input">
-                        ${Array(5).fill().map((_, i) => `
-                            <input type="radio" name="rating-${index}" value="${i + 1}" 
-                                ${i + 1 === Math.round(review.rating) ? 'checked' : ''}>
-                            <label class="star-label">★</label>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Review Text</label>
-                    <textarea class="review-text-input" rows="4">${review.content}</textarea>
-                </div>
-                <div class="form-group">
-                    <label>Date Posted</label>
-                    <input type="text" class="review-date-input" value="${relativeDate}" readonly>
-                </div>
-                <div class="form-group">
-                    <label class="verified-label">
-                        <input type="checkbox" class="verified-checkbox" ${review.verified ? 'checked' : ''}>
-                        <span>Verified Purchase</span>
-                    </label>
-                </div>
-                <div class="edit-actions">
-                    <button type="button" class="delete-review-btn" data-index="${index}">
-                        <i class="fas fa-trash-alt"></i>
-                        Delete
-                    </button>
-                    <button type="button" class="update-review-btn" data-index="${index}">
-                        <i class="fas fa-save"></i>
-                        Update
-                    </button>
-                </div>
-            </div>
-        `;
-
-        // Add event listeners for checkboxes
-        const checkbox = reviewElement.querySelector('.review-checkbox');
-        checkbox.addEventListener('change', () => {
-            updateBulkActionsVisibility();
-            updateSelectAllCheckbox();
-        });
-
-        // Add existing event listeners for delete and update buttons
-        const deleteBtn = reviewElement.querySelector('.delete-review-btn');
-        const updateBtn = reviewElement.querySelector('.update-review-btn');
-
-        deleteBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to delete this review?')) {
-                reviewElement.remove();
-                showToast('Review deleted successfully');
-            }
-        });
-
-        updateBtn.addEventListener('click', () => {
-            const form = reviewElement.querySelector('.review-edit-form');
-            const newData = {
-                name: form.querySelector('.review-name-input').value,
-                rating: parseInt(form.querySelector('input[name^="rating"]:checked').value),
-                content: form.querySelector('.review-text-input').value,
-                date: form.querySelector('.review-date-input').value,
-                verified: form.querySelector('.verified-checkbox').checked
-            };
-            
-            // Update the review in the allReviews array
-            allReviews[index] = { ...allReviews[index], ...newData };
-
-            // Find and update the corresponding review in the main reviews container
-            const reviewsContainer = document.querySelector('.reviews-container');
-            const reviewItems = Array.from(reviewsContainer.querySelectorAll('.review-item'));
-            
-            // Only update visible reviews (first two)
-            if (index < reviewItems.length) {
-                const reviewToUpdate = reviewItems[index];
-                
-                // Update name
-                reviewToUpdate.querySelector('.user-name').textContent = newData.name;
-                
-                // Update rating
-                const ratingContainer = reviewToUpdate.querySelector('.review-rating');
-                ratingContainer.innerHTML = getStarRating(newData.rating);
-                
-                // Update content
-                const contentP = reviewToUpdate.querySelector('.review-content p');
-                contentP.textContent = newData.content;
-                
-                // Update date
-                reviewToUpdate.querySelector('.review-date').textContent = newData.date;
-                
-                // Update verified badge
-                const verifiedBadge = reviewToUpdate.querySelector('.verified-badge');
-                if (verifiedBadge) {
-                    verifiedBadge.style.display = newData.verified ? 'flex' : 'none';
-                } else if (newData.verified) {
-                    // Create verified badge if it doesn't exist
-                    const newBadge = document.createElement('div');
-                    newBadge.className = 'verified-badge';
-                    newBadge.innerHTML = `
-                        <i class="fas fa-check-circle"></i>
-                        <span>Verified Purchase</span>
-                    `;
-                    reviewToUpdate.appendChild(newBadge);
-                }
-
-                // Reinitialize review content for "Show more" functionality
-                initializeReviewContent();
-            }
-
-            // Update overall rating and review count if they exist
-            updateOverallRating();
-            
-            showToast('Review updated successfully');
-        });
-
-        reviewsList.appendChild(reviewElement);
-    });
-
-    // Function to update bulk actions visibility
-    function updateBulkActionsVisibility() {
-        const bulkActions = document.querySelector('.bulk-actions');
-        const checkedBoxes = reviewsList.querySelectorAll('.review-checkbox:checked');
-        bulkActions.style.display = checkedBoxes.length > 0 ? 'flex' : 'none';
-    }
-
-    // Function to update select all checkbox state
-    function updateSelectAllCheckbox() {
-        const allCheckboxes = reviewsList.querySelectorAll('.review-checkbox');
-        const checkedCheckboxes = reviewsList.querySelectorAll('.review-checkbox:checked');
-        selectAllCheckbox.checked = allCheckboxes.length === checkedCheckboxes.length;
-    }
-
-    // Add bulk delete functionality
-    const bulkDeleteBtn = selectAllContainer.querySelector('.bulk-delete-btn');
-    bulkDeleteBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to delete all selected reviews?')) {
-            const checkedBoxes = reviewsList.querySelectorAll('.review-checkbox:checked');
-            checkedBoxes.forEach(checkbox => {
-                const reviewItem = checkbox.closest('.review-edit-item');
-                reviewItem.remove();
-            });
-            updateBulkActionsVisibility();
-            updateSelectAllCheckbox();
-            showToast('Selected reviews deleted successfully');
-        }
-    });
-
-    // Update summary information
-    const totalReviews = document.getElementById('editTotalReviews');
-    const overallRating = document.getElementById('editOverallRating');
     
-    if (totalReviews && overallRating) {
-        totalReviews.value = allReviews.length;
-        const avgRating = (allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length).toFixed(1);
-        overallRating.value = avgRating;
-    }
-}
-
-// Add this helper function to update overall rating
-function updateOverallRating() {
-    const avgRating = (allReviews.reduce((sum, review) => sum + review.rating, 0) / allReviews.length).toFixed(1);
+    // Initialize review content functionality
+    initializeReviewContent();
     
-    // Update rating number
-    const ratingNumber = document.querySelector('.rating-number');
-    if (ratingNumber) {
-        ratingNumber.textContent = avgRating;
-    }
-
-    // Update rating stars
-    const ratingStars = document.querySelector('.rating-stars');
-    if (ratingStars) {
-        ratingStars.innerHTML = getStarRating(parseFloat(avgRating));
-    }
-
-    // Update total reviews count
-    const totalReviews = document.querySelector('.total-reviews');
-    if (totalReviews) {
-        totalReviews.textContent = `Based on ${allReviews.length} reviews`;
-    }
-
-    // Update review count in title
-    const reviewCount = document.querySelector('.review-count');
-    if (reviewCount) {
-        reviewCount.textContent = `${allReviews.length} Reviews`;
-    }
-}
-
-// Make sure getStarRating function is defined if not already
-function getStarRating(rating) {
-    return Array(5).fill().map((_, index) => {
-        if (index + 1 <= rating) {
-            return '<i class="fas fa-star"></i>';
-        } else if (index + 0.5 === rating) {
-            return '<i class="fas fa-star-half-alt"></i>';
-        } else {
-            return '<i class="far fa-star"></i>';
-        }
-    }).join('');
+    return reviewElement;
 }
 
 // ...existing code...
